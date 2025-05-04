@@ -7,3 +7,8 @@
 @theme {
   --font-display: "Geist", sans-serif;
 }
+
+.skeleton {
+  @apply rounded-sm;
+  @apply animate-[skeleton_0.5s_ease-in-out_infinite];
+}

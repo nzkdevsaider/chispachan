@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma-client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  userId      String        @id @default(uuid())
+  ip          String        @unique
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Thread      Thread[]
+  ThreadReply ThreadReply[]
+}
+
+model Thread {
+  threadId     String        @id @default(uuid())
+  title        String
+  content      String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       String
+  user         User          @relation(fields: [userId], references: [userId])
+  ThreadReply  ThreadReply[]
+  Board        Board?        @relation(fields: [boardBoardId], references: [boardId])
+  boardBoardId String?
+}
+
+model ThreadReply {
+  replyId   String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  threadId  String
+  userId    String
+  thread    Thread   @relation(fields: [threadId], references: [threadId])
+  user      User     @relation(fields: [userId], references: [userId])
+}
+
+model Board {
+  boardId   String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Thread    Thread[]
+}
